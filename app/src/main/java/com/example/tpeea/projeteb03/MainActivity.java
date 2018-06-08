@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     private TextView mTextViewValue;
     private TextView mTextViewString;
+    private OscilloGraphView mOGView;
     private final static int NO_ADAPTER = 0;
     private final static String[] PERMISSIONS = {Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION};
     private final int PERMISSIONS_REQUEST_CODE = 1;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         this.mFrameProcessor= new FrameProcessor();
         //mTextViewValue = findViewById(R.id.valueSlider);
         mTextViewString = findViewById(R.id.stringSlider);
+        mOGView=findViewById(R.id.oscilloView);
 
 
 
