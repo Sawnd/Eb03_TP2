@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
-public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callback{
+/*public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callback{
 
     private class DessinThread extends Thread {
         
@@ -43,7 +43,7 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
             ch2_data[i] = ch2_pos;
         }
 
-        plot_thread = new WaveformPlotThread(getHolder(), this);
+       // plot_thread = new WaveformPlotThread(getHolder(), this);
         //setFocusable(true);
         ch1_color.setColor(Color.YELLOW);
         ch2_color.setColor(Color.RED);
@@ -60,7 +60,7 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
     }
 
 
-    @Override
+   @Override
     public void surfaceCreated(SurfaceHolder holder) {
         plot_thread.setRunning(true);
         plot_thread.start();
@@ -84,3 +84,4 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
 
 
 }
+*/

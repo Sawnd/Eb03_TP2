@@ -142,14 +142,16 @@ public class FrameProcessor {
         int size = trame.length;
 
         // On enleve le header, la tail
-        byte[] result = new byte[size - 5];
+        byte[] payloadUnescaped = new byte[size - 5];
         int k=0;
-        for (int i = 2;i<size-2;i++){
-            result[k]=trame[i];
+        for (int i = 2;i<size-3;i++){
+            payloadUnescaped[k]=trame[i];
+            k++;
         }
 
+        byte[] payload = toUnechap(payloadUnescaped);
 
-        return result;
+        return payload;
     }
 
 
