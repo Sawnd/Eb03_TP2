@@ -52,9 +52,9 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
     private int width=640;
     private int heigth=480;
 
-    private static int[] ch1_data = new int[640];
-    private static int[] ch2_data = new int[640];
-    private static int ch1_pos = 240, ch2_pos = 240;
+    private /*static*/ int[] ch1_data = new int[640];
+    private /*static*/ int[] ch2_data = new int[640];
+    private /*static*/ int ch1_pos = 240, ch2_pos = 240;
 
     private Paint ch1_color = new Paint();
     private Paint ch2_color = new Paint();
@@ -67,7 +67,16 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
         super(context, attrs);
         //super(context);
         getHolder().addCallback(this);
-        
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        this.width = size.x;
+
+        this.ch1_data = new int[width];
+        this.ch2_data = new int[width];
+
         int i;
         for(i=0; i<width; i++){
             ch1_data[i] = ch1_pos;

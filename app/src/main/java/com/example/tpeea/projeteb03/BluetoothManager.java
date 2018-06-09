@@ -38,9 +38,9 @@ public class BluetoothManager{
 
     //Constantes liées aux messages entre l'interface utilisateur et le device
     private interface MessageConstants {
-        public static final int MESSAGE_READ = 0;
-        public static final int MESSAGE_WRITE = 1;
-        public static final int MESSAGE_TOAST = 2;
+        public static final int MESSAGE_READ = 4;
+        public static final int MESSAGE_WRITE = 5;
+        public static final int MESSAGE_TOAST = 6;
     }
 
 
@@ -208,7 +208,7 @@ public class BluetoothManager{
             int numBytes; // bytes returned from read()
 
             // Keep listening to the InputStream until an exception occurs.
-            /*while (true) {
+            while (true) {
                 try {
                     // Read from the InputStream.
                         numBytes = tInStream.read(tBuffer);
@@ -219,15 +219,13 @@ public class BluetoothManager{
                     Log.d(TAG, "Input stream déconnecté", e);
                     break;
                 }
-            }*/
+            }
         }
 
         // Appellée pour envoyer des données vers l'oscillo
         public void write(byte[] bytes) {
             try {
-                Log.i(TAG, "writing pour de vrai");
                 tOutStream.write(bytes);
-                Log.i(TAG, "postwriting");
                 Message writtenMsg = mHandler.obtainMessage(MessageConstants.MESSAGE_WRITE, -1, -1, tBuffer);
                 writtenMsg.sendToTarget();
             } catch (IOException e) {

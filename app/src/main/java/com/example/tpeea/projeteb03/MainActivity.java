@@ -1,6 +1,7 @@
 package com.example.tpeea.projeteb03;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private OscilloManager mOscilloManager;
     private FrameProcessor mFrameProcessor;
     private Slider mSlider;
-    private Handler mHandler;
+    //private Handler mHandler;
+    private static Handler mHandler;
     private TextView mTextViewValue;
     private TextView mTextViewString;
     private OscilloGraphView mOGView;
@@ -36,6 +39,33 @@ public class MainActivity extends AppCompatActivity {
     private final int USER_REQUEST = 2;
     private final int PERMISSION_GRANTED = 3;
 
+
+    public static final int MESSAGE_READ = 4;
+    public static final int MESSAGE_WRITE = 5;
+    public static final int MESSAGE_TOAST = 6;
+
+    //bails étranges
+    private static final int MAX_SAMPLES = 640;
+    private static final int  MAX_LEVEL	= 240;
+    private static final int  DATA_START = (MAX_LEVEL + 1);
+    private static final int  DATA_END = (MAX_LEVEL + 2);
+
+    private static final byte  REQ_DATA = 0x00;
+    private static final byte  ADJ_HORIZONTAL = 0x01;
+    private static final byte  ADJ_VERTICAL = 0x02;
+    private static final byte  ADJ_POSITION = 0x03;
+
+    private static final byte  CHANNEL1 = 0x01;
+    private static final byte  CHANNEL2 = 0x02;
+
+    private int[] ch1_data = new int[MAX_SAMPLES/2];
+    private int[] ch2_data = new int[MAX_SAMPLES/2];
+
+    private int dataIndex=0, dataIndex1=0, dataIndex2=0;
+    private boolean bDataAvailable=false;
+
+
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +73,53 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.mSlider = findViewById(R.id.mSlider);
-        this.mHandler = new Handler();
+        //this.mHandler = new Handler();
+        this.mHandler = new Handler(){
+
+            @Override
+            public void handleMessage(Message msg) {
+                switch(msg.what){
+                    case MESSAGE_TOAST:
+                    //Toast.makeText(getApplicationContext(), msg.getData().getString(),Toast.LENGTH_SHORT).show();
+                        break;
+                    case MESSAGE_READ:
+                        int raw, data_length, x;
+                        byte[] readBuf = (byte[]) msg.obj;
+                        data_length = msg.arg1;
+                        for(x=0; x<data_length; x++){
+                            raw = UByte(readBuf[x]);
+                            if( raw>MAX_LEVEL ){
+                                if( raw==DATA_START ){
+                                    bDataAvailable = true;
+                                    dataIndex = 0; dataIndex1=0; dataIndex2=0;
+                                }
+                                else if( (raw==DATA_END) || (dataIndex>=MAX_SAMPLES) ){
+                                    bDataAvailable = false;
+                                    dataIndex = 0; dataIndex1=0; dataIndex2=0;
+                                    mOGView.set_data(ch1_data, ch2_data);
+                                    /*if(bReady){ // send "REQ_DATA" again
+                                        MainActivity.this.sendMessage( new String(new byte[] {REQ_DATA}) );
+                                    }*/
+                                    break;
+                                }
+                            }
+                            else if( (bDataAvailable) && (dataIndex<(MAX_SAMPLES)) ){ // valid data
+                                if((dataIndex++)%2==0) ch1_data[dataIndex1++] = raw;	// even data
+                                else ch2_data[dataIndex2++] = raw;	// odd data
+                            }
+
+                        }
+                        break;
+                }
+
+            }
+            private int UByte(byte b){
+                if(b<0) // if negative
+                    return (int)( (b&0x7F) + 128 );
+                else
+                    return (int)b;
+            }
+        };
         this.mBluetoothManager = new BluetoothManager(this, mHandler);
         this.mOscilloManager= OscilloManager.getOscilloManager();
         this.mFrameProcessor= new FrameProcessor();
@@ -137,6 +213,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
 
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

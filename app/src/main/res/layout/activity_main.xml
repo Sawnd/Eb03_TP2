@@ -40,7 +40,7 @@
             android:id="@+id/oscilloView"
             android:layout_gravity="top"
             android:layout_width="match_parent"
-            android:layout_height="150dp" />
+            android:layout_height="480px"/>
 
         <com.example.tpeea.projeteb03.Slider
             android:id="@+id/mSlider"
