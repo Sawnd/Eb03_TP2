@@ -49,12 +49,12 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
 
     private DessinThread dessinThread;
 
-    private int width=320;
-    private int heigth=240;
+    private int width=640;
+    private int heigth=480;
 
-    private static int[] ch1_data = new int[320];
-    private static int[] ch2_data = new int[320];
-    private static int ch1_pos = 120, ch2_pos = 120;
+    private static int[] ch1_data = new int[640];
+    private static int[] ch2_data = new int[640];
+    private static int ch1_pos = 240, ch2_pos = 240;
 
     private Paint ch1_color = new Paint();
     private Paint ch2_color = new Paint();
