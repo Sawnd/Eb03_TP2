@@ -224,11 +224,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, btDevice.getName(), Toast.LENGTH_SHORT).show();
                 //connection à btdevice:
                 mBluetoothManager.connect(btDevice);
-                //lancement du connectedThread
-                if(mBluetoothManager.getBluetoothState()==mBluetoothManager.STATE_CONNECTING){
-                    mBluetoothManager.connected(mBluetoothManager.getmConnectThread().gettSocket());
-                }
-
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this, "retour cancelled", Toast.LENGTH_SHORT).show();
             }

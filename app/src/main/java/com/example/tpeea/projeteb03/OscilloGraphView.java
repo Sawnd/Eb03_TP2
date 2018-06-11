@@ -68,6 +68,7 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
         //super(context);
         getHolder().addCallback(this);
 
+
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();

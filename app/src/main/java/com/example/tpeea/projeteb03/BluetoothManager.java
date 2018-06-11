@@ -65,7 +65,7 @@ public class BluetoothManager{
             this.mConnectedThread = null;
         }
 
-        this.mConnectThread = new ConnectThread(bluetoothDevice);
+        this.mConnectThread = new ConnectThread(this,bluetoothDevice);
         this.mConnectThread.start();
 
         this.setBluetoothState(STATE_CONNECTING);
@@ -110,7 +110,6 @@ public class BluetoothManager{
                 return;
             }
         }
-        Log.i(TAG, "writing");
         mConnectedThread.write(out);
     }
 
@@ -135,10 +134,12 @@ public class BluetoothManager{
 
         private final BluetoothSocket tSocket;
         private final BluetoothDevice tDevice;
+        private BluetoothManager tManager;
         public boolean isConnected = false;
-        public ConnectThread(BluetoothDevice bd){
+        public ConnectThread(BluetoothManager bm, BluetoothDevice bd){
             BluetoothSocket tmp = null;
             tDevice = bd;
+            tManager=bm;
             try {
                 // Connexion du socket avec le device à partir de son uuid
                 tmp = tDevice.createRfcommSocketToServiceRecord(uuid);
@@ -153,6 +154,7 @@ public class BluetoothManager{
             try {
                 // Connexion à travers le socket, bloquante jusqu'à sa réussite ou une exception
                 tSocket.connect();
+                Log.i(TAG, "tSocket.connect()");
             } catch (IOException connectException) {
                 // S'il est impossible de se connecter, fermer le socket
                 try {
@@ -165,6 +167,7 @@ public class BluetoothManager{
 
             //Connexion réussie
             isConnected=true;
+            tManager.connected(tSocket);
 
         }
 
@@ -186,6 +189,7 @@ public class BluetoothManager{
 
                 public ConnectedThread(BluetoothSocket bs){
                     this.tSocket=bs;
+
                     InputStream tmpIn = null;
                     OutputStream tmpOut=null;
                     try {
@@ -204,6 +208,7 @@ public class BluetoothManager{
         }
 
         public void run() {
+            Log.i(TAG,"Lancement du connectedThread");
             tBuffer = new byte[1024];
             int numBytes; // bytes returned from read()
 
@@ -230,7 +235,6 @@ public class BluetoothManager{
                 writtenMsg.sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Erreur lors de l'envoi de données");
-
                 Message writeErrorMsg = mHandler.obtainMessage(MessageConstants.MESSAGE_TOAST);
                 Bundle bundle = new Bundle();
                 bundle.putString("toast", "Envoi impossible");
