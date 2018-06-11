@@ -1,4 +1,4 @@
-/*package com.example.tpeea.projeteb03;
+package com.example.tpeea.projeteb03;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,10 +8,6 @@ import android.view.ViewGroup;
 
 public class TimeDivFragment extends Fragment {
 
-
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -20,4 +16,4 @@ public class TimeDivFragment extends Fragment {
 
 
 
-}*/
+}

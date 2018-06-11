@@ -60,13 +60,13 @@
             />
 
 
-        <!--<fragment
+        <fragment
             android:id="@+id/timediv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:name="com.example.tpeea.projeteb03.TimeDivFragment"
             android:orientation="horizontal" >
-        </fragment>-->
+        </fragment>
 
         <TextView
             android:id="@+id/stringSlider"
