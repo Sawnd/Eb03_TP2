@@ -3,6 +3,7 @@ package com.example.tpeea.projeteb03;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -33,6 +35,31 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothManager mBluetoothManager;
     private OscilloManager mOscilloManager;
     private FrameProcessor mFrameProcessor;
+
+    public BluetoothManager getmBluetoothManager() {
+        return mBluetoothManager;
+    }
+
+    public void setmBluetoothManager(BluetoothManager mBluetoothManager) {
+        this.mBluetoothManager = mBluetoothManager;
+    }
+
+    public OscilloManager getmOscilloManager() {
+        return mOscilloManager;
+    }
+
+    public void setmOscilloManager(OscilloManager mOscilloManager) {
+        this.mOscilloManager = mOscilloManager;
+    }
+
+    public FrameProcessor getmFrameProcessor() {
+        return mFrameProcessor;
+    }
+
+    public void setmFrameProcessor(FrameProcessor mFrameProcessor) {
+        this.mFrameProcessor = mFrameProcessor;
+    }
+
     private Slider mSlider;
     //private Handler mHandler;
     private static Handler mHandler;
@@ -69,8 +96,6 @@ public class MainActivity extends AppCompatActivity {
     private int dataIndex=0, dataIndex1=0, dataIndex2=0;
     private boolean bDataAvailable=false;
 
-    private Switch ch1Swi;
-
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,24 +104,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.mSlider = findViewById(R.id.mSlider);
-        this.ch1Swi = findViewById(R.id.ch1Switch);
-        ch1Swi.setChecked(false);
-        ch1Swi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(mBluetoothManager.getBluetoothState()==mBluetoothManager.STATE_CONNECTED) {
-                    if (isChecked){
-                        mBluetoothManager.write(mFrameProcessor.toFrame(mOscilloManager.setChannel(1, true)));
-                        Toast.makeText(MainActivity.this,"ch1 ouvert",Toast.LENGTH_SHORT).show();
-                    } else {
-                        mBluetoothManager.write(mFrameProcessor.toFrame(mOscilloManager.setChannel(1, false)));
-                        Toast.makeText(MainActivity.this,"ch1 ferme",Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            }
-        });
+        FragmentManager fragmentManager = getFragmentManager ();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction ();
+// work here to change Activity fragments (add, remove, etc.).  Example here of adding.
+        fragmentTransaction.add (R.id.main,new ChannelFragment());
+        fragmentTransaction.add (R.id.main,new TimeDivFragment());
+        fragmentTransaction.commit ();
 
 
         this.mHandler = new Handler(){
