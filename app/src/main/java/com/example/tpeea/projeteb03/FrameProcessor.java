@@ -85,7 +85,7 @@ public class FrameProcessor {
         return total;
     }
 
-    // permet d'inserer un caractère d'ecchappemet devant les bytes réservés , ici 0x04,0x05,0x06. Rajoute 0x06 au carcatère suivant et renvoie le tableau de byte échappé
+    // permet d'inserer un caractère d'echappemet devant les bytes réservés , ici 0x04,0x05,0x06. Rajoute 0x06 au carcatère suivant et renvoie le tableau de byte échappé
     byte[] toEchap(byte[] b) {
         int i = 0;
         for (byte bi : b) {
@@ -139,18 +139,21 @@ public class FrameProcessor {
     }
 
     public byte[] fromFrame(byte[] trame) {
-        int size = trame.length;
 
+        int size = trame.length;
         // On enleve le header, la tail
         byte[] payloadUnescaped = new byte[size - 5];
         int k=0;
-        for (int i = 2;i<size-3;i++){
+        for (int i = 3;i<size-2;i++){
             payloadUnescaped[k]=trame[i];
             k++;
         }
-
         byte[] payload = toUnechap(payloadUnescaped);
-
+        // On verifie d'abord le byte de controle, si il n'est pas corect, on renvoie le payload null
+        byte ctrlAVerifier = (byte)Integer.parseInt(toComplement2(Integer.toHexString(toSumTab(payload) + trame[2])),16);
+        if(trame[size -2] != ctrlAVerifier) {
+           return null;
+        }
         return payload;
     }
 
