@@ -185,6 +185,7 @@ public class BluetoothManager{
                 private final BluetoothSocket tSocket;
                 private final InputStream tInStream;
                 private final OutputStream tOutStream;
+                public StringBuilder stb=new StringBuilder();
                 private byte[] tBuffer;
 
                 public ConnectedThread(BluetoothSocket bs){
@@ -217,6 +218,11 @@ public class BluetoothManager{
                 try {
                     // Read from the InputStream.
                         numBytes = tInStream.read(tBuffer);
+                    for (byte b : tBuffer) {
+                        stb.append(String.format("%02X ", b));
+                    }
+
+                    Log.i(TAG,stb.toString());
                     // Send the obtained bytes to the UI activity.
                     Message readMsg = mHandler.obtainMessage(MessageConstants.MESSAGE_READ, numBytes, -1, tBuffer);
                     readMsg.sendToTarget();

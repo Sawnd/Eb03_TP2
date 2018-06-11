@@ -13,9 +13,11 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private static Handler mHandler;
     private TextView mTextViewValue;
     private TextView mTextViewString;
+    private Button ch1Button;
     private OscilloGraphView mOGView;
     private final static int NO_ADAPTER = 0;
     private final static String[] PERMISSIONS = {Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION};
@@ -64,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
     private int dataIndex=0, dataIndex1=0, dataIndex2=0;
     private boolean bDataAvailable=false;
 
+    private Button testButton;
+
+
+
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -73,9 +80,44 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.mSlider = findViewById(R.id.mSlider);
+        this.ch1Button=findViewById(R.id.ch1Button);
+        this.ch1Button.setOnClickListener(new View.OnClickListener() {
+
+            public boolean ch1State=false;
+            public boolean ch2State=false;
+
+            @Override
+            public void onClick(View v) {
+
+                if(mBluetoothManager.getBluetoothState()==mBluetoothManager.STATE_CONNECTED) {
+                    if (ch1State=false){
+                        mBluetoothManager.write(mFrameProcessor.toFrame(mOscilloManager.setChannel(1, true)));
+                        Toast.makeText(MainActivity.this,"ch1 ouvert",Toast.LENGTH_SHORT).show();
+                       this.ch1State=true;
+                    } else {
+                        mBluetoothManager.write(mFrameProcessor.toFrame(mOscilloManager.setChannel(1, false)));
+                        Toast.makeText(MainActivity.this,"ch1 ferme",Toast.LENGTH_SHORT).show();
+                        ch1State=false;
+                    }
+
+                }
+            }
+        });
+
+        this.testButton = findViewById(R.id.paniqueButton);
+        this.testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mBluetoothManager.getBluetoothState()==mBluetoothManager.STATE_CONNECTED) {
+                        mBluetoothManager.write(mFrameProcessor.toFrame(mOscilloManager.setChannel(1, true)));
+                        Toast.makeText(MainActivity.this,"ch1 ouvert",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         //this.mHandler = new Handler();
         this.mHandler = new Handler(){
-
+            //private StringBuilder stbb = new StringBuilder();
             @Override
             public void handleMessage(Message msg) {
                 switch(msg.what){
@@ -85,9 +127,10 @@ public class MainActivity extends AppCompatActivity {
                     case MESSAGE_READ:
                         int raw, data_length, x;
                         byte[] readBuf = (byte[]) msg.obj;
+                        //byte[] ff=mFrameProcessor.fromFrame(readBuf);
                         data_length = msg.arg1;
                         for(x=0; x<data_length; x++){
-                            raw = UByte(readBuf[x]);
+                            raw = UByte(readBuf[x]); //valeurs des tensions en fonction du temps
                             if( raw>MAX_LEVEL ){
                                 if( raw==DATA_START ){
                                     bDataAvailable = true;
@@ -189,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     private int BluetoothRights() {
         if (BluetoothAdapter.getDefaultAdapter() == null) {

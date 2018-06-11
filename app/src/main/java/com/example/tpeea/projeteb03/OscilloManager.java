@@ -1,5 +1,7 @@
 package com.example.tpeea.projeteb03;
 
+import android.util.Log;
+
 /**
  * Created by Steph on 05/05/2018.
  */
@@ -58,8 +60,12 @@ public class OscilloManager implements Transceiver.TransceiverDataListener, Tran
         if(channel==1){
             commande[1]=0x01;
         }
-        if(state  == true){
+        if(state){
             commande[2]=0x01;
+            Log.i("OSCILLOMANAGER","channel 1 ouvert");
+        }else if(!state){
+            commande[2]=0x00;
+            Log.i("OSCILLOMANAGER","channel 1 ferme");
         }
         return commande;
     }
