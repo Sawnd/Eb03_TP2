@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Slider mSlider;
     //private Handler mHandler;
     private static Handler mHandler;
-    private TextView mTextViewValue;
     private TextView mTextViewString;
-    private Button ch1Button;
     private OscilloGraphView mOGView;
     private final static int NO_ADAPTER = 0;
     private final static String[] PERMISSIONS = {Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION};
@@ -69,10 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private int dataIndex=0, dataIndex1=0, dataIndex2=0;
     private boolean bDataAvailable=false;
 
-    private Button testButton;
-
-
-
+    private Switch ch1Swi;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -82,42 +79,26 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.mSlider = findViewById(R.id.mSlider);
-        this.ch1Button=findViewById(R.id.ch1Button);
-        this.ch1Button.setOnClickListener(new View.OnClickListener() {
-
-            public boolean ch1State=false;
-            public boolean ch2State=false;
+        this.ch1Swi = findViewById(R.id.ch1Switch);
+        ch1Swi.setChecked(false);
+        ch1Swi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
             @Override
-            public void onClick(View v) {
-
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(mBluetoothManager.getBluetoothState()==mBluetoothManager.STATE_CONNECTED) {
-                    if (ch1State=false){
+                    if (isChecked){
                         mBluetoothManager.write(mFrameProcessor.toFrame(mOscilloManager.setChannel(1, true)));
                         Toast.makeText(MainActivity.this,"ch1 ouvert",Toast.LENGTH_SHORT).show();
-                       this.ch1State=true;
                     } else {
                         mBluetoothManager.write(mFrameProcessor.toFrame(mOscilloManager.setChannel(1, false)));
                         Toast.makeText(MainActivity.this,"ch1 ferme",Toast.LENGTH_SHORT).show();
-                        ch1State=false;
                     }
 
                 }
             }
         });
 
-        this.testButton = findViewById(R.id.paniqueButton);
-        this.testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mBluetoothManager.getBluetoothState()==mBluetoothManager.STATE_CONNECTED) {
-                        mBluetoothManager.write(mFrameProcessor.toFrame(mOscilloManager.setChannel(1, true)));
-                        Toast.makeText(MainActivity.this,"ch1 ouvert",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
-        //this.mHandler = new Handler();
         this.mHandler = new Handler(){
             //private StringBuilder stbb = new StringBuilder();
             @Override
