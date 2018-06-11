@@ -141,17 +141,17 @@ public class FrameProcessor {
     public byte[] fromFrame(byte[] trame) {
 
         int size = trame.length;
-        /*byte[] result =new byte[256];
+        byte[] result =new byte[256];
         for (int k=0;k<size;k++){
-            if (trame[i]=0x8F){
+            if (trame[k] == (byte) 0x8F){
                 for (int j=0;j<result.length;j++){
                     result[j]=trame[k+1];
                     k++;//on ne copie pas le 0x8f paskil sert a r
                 }
             }
-        }*/
+        }
         // On enleve le header, la tail
-        byte[] payloadUnescaped = new byte[size - 5];
+        /*byte[] payloadUnescaped = new byte[size - 5];
         int k=0;
         for (int i = 3;i<size-2;i++){
             payloadUnescaped[k]=trame[i];
@@ -163,8 +163,8 @@ public class FrameProcessor {
         if(trame[size -2] != ctrlAVerifier) {
            return null;
         }
-        return payload;
-        //return result;
+        return payload;*/
+        return result;
     }
 
 
