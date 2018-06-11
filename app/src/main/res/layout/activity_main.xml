@@ -80,11 +80,14 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
-        <Switch
-            android:id="@+id/ch1Switch"
-            android:text="ch1"
+        <fragment
+            android:id="@+id/ch1frag"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:name="com.example.tpeea.projeteb03.Ch1Fragment"
+            android:orientation="horizontal" >
+        </fragment>
+
 
     </LinearLayout>
 
