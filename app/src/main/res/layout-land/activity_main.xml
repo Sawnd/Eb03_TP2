@@ -34,7 +34,7 @@
         android:paddingLeft="1dp"
         android:paddingRight="1dp"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="bottom">
 
         <com.example.tpeea.projeteb03.OscilloGraphView
             android:id="@+id/oscilloView"

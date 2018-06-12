@@ -35,7 +35,8 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
                 try{
                     c = holder.lockCanvas(null);
                     synchronized (holder) {
-                       plot_area.PlotPoints(c);
+                        if(c!=null){
+                       plot_area.PlotPoints(c);}
                     }
                 }finally{
                     if(c!=null){

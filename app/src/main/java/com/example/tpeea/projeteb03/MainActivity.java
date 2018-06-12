@@ -29,6 +29,10 @@ import android.widget.Toast;
 
 import static android.support.v4.content.PermissionChecker.PERMISSION_DENIED;
 
+
+//TODO gerer onsaveinstancestate pour les changements d'orientation des fragments et de l'activité
+//TODO passer le resultat de fromframe dans ubyte
+
 public class MainActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
@@ -105,12 +109,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         this.mSlider = findViewById(R.id.mSlider);
 
-        FragmentManager fragmentManager = getFragmentManager ();
+       /* FragmentManager fragmentManager = getFragmentManager ();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction ();
 // work here to change Activity fragments (add, remove, etc.).  Example here of adding.
         fragmentTransaction.add (R.id.main,new ChannelFragment());
         fragmentTransaction.add (R.id.main,new TimeDivFragment());
-        fragmentTransaction.commit ();
+        fragmentTransaction.commit ();*/
 
 
         this.mHandler = new Handler(){

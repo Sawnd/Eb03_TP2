@@ -10,10 +10,19 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+//TODO pouvoir faire un fragment par channel
+
 public class ChannelFragment extends Fragment {
 
     private Switch chSwitch;
     private MainActivity activity;
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean("switchState",chSwitch.isChecked());
+    }
 
     @Override
     public void onAttach(Activity activity)
@@ -25,6 +34,10 @@ public class ChannelFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        if(savedInstanceState!=null){
+
+        }
+
         View view = inflater.inflate(R.layout.ch_fragment, container, false);
         chSwitch=view.findViewById(R.id.chSwitch);
         chSwitch.setChecked(false);
