@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 else
                     return (int)b;
             }
+            
         };
         this.mBluetoothManager = new BluetoothManager(this, mHandler);
         this.mOscilloManager= OscilloManager.getOscilloManager();
