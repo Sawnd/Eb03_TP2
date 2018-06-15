@@ -96,6 +96,14 @@
                 android:layout_height="wrap_content"
                 class="com.example.tpeea.projeteb03.ChannelFragment" ></fragment>
 
+
+            <fragment
+                android:id="@+id/chFragment2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                class="com.example.tpeea.projeteb03.ChannelFragment" ></fragment>
+
             <fragment
                 android:id="@+id/timeDivFragment1"
                 android:layout_width="0dp"

@@ -16,7 +16,15 @@ public class ChannelFragment extends Fragment {
 
     private Switch chSwitch;
     private MainActivity activity;
+    private int channelRef;
 
+    public int getChannelRef() {
+        return channelRef;
+    }
+
+    public void setChannelRef(int channelRef) {
+        this.channelRef = channelRef;
+    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -40,6 +48,11 @@ public class ChannelFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.ch_fragment, container, false);
         chSwitch=view.findViewById(R.id.chSwitch);
+        if (channelRef==1){
+            chSwitch.setText("ch1");
+        }else if(channelRef==2){
+            chSwitch.setText("ch2");
+        }
         chSwitch.setChecked(false);
         chSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
@@ -47,11 +60,22 @@ public class ChannelFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(activity.getmBluetoothManager().getBluetoothState()==activity.getmBluetoothManager().STATE_CONNECTED) {
                     if (isChecked){
-                        activity.getmBluetoothManager().write(activity.getmFrameProcessor().toFrame(activity.getmOscilloManager().setChannel(1, true)));
-                        Toast.makeText(activity,"ch1 ouvert",Toast.LENGTH_SHORT).show();
+                        if(channelRef==1) {
+                            activity.getmBluetoothManager().write(activity.getmFrameProcessor().toFrame(activity.getmOscilloManager().setChannel(1, true)));
+                            Toast.makeText(activity, "ch1 ouvert", Toast.LENGTH_SHORT).show();
+                        }else{
+                            activity.getmBluetoothManager().write(activity.getmFrameProcessor().toFrame(activity.getmOscilloManager().setChannel(2, true)));
+                            Toast.makeText(activity, "ch2 ouvert", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        activity.getmBluetoothManager().write(activity.getmFrameProcessor().toFrame(activity.getmOscilloManager().setChannel(1, false)));
-                        Toast.makeText(activity,"ch1 ferme",Toast.LENGTH_SHORT).show();
+                        if(channelRef==1){
+                            activity.getmBluetoothManager().write(activity.getmFrameProcessor().toFrame(activity.getmOscilloManager().setChannel(1, false)));
+                            Toast.makeText(activity,"ch1 ferme",Toast.LENGTH_SHORT).show();
+                        }else{
+                            activity.getmBluetoothManager().write(activity.getmFrameProcessor().toFrame(activity.getmOscilloManager().setChannel(2, false)));
+                            Toast.makeText(activity,"ch1 ferme",Toast.LENGTH_SHORT).show();
+                        }
+
                     }
 
                 }

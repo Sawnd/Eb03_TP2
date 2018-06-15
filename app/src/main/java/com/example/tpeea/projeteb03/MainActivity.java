@@ -100,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
     private int dataIndex=0, dataIndex1=0, dataIndex2=0;
     private boolean bDataAvailable=false;
 
+    private ChannelFragment ch1Fragment;
+    private ChannelFragment ch2Fragment;
+
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,49 +112,66 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         this.mSlider = findViewById(R.id.mSlider);
 
-       /* FragmentManager fragmentManager = getFragmentManager ();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction ();
+       FragmentManager fragmentManager = getFragmentManager();
+        /*FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction ();
 // work here to change Activity fragments (add, remove, etc.).  Example here of adding.
         fragmentTransaction.add (R.id.main,new ChannelFragment());
         fragmentTransaction.add (R.id.main,new TimeDivFragment());
         fragmentTransaction.commit ();*/
+
+       ch1Fragment= (ChannelFragment) fragmentManager.findFragmentById(R.id.chFragment1);
+       ch2Fragment= (ChannelFragment) fragmentManager.findFragmentById(R.id.chFragment2);
+       ch1Fragment.setChannelRef(1);
+       //ch2Fragment.setChannelRef(2);
 
 
         this.mHandler = new Handler(){
             //private StringBuilder stbb = new StringBuilder();
             @Override
             public void handleMessage(Message msg) {
+                int cmptErreur=0;
                 switch(msg.what){
                     case MESSAGE_TOAST:
                     //Toast.makeText(getApplicationContext(), msg.getData().getString(),Toast.LENGTH_SHORT).show();
                         break;
                     case MESSAGE_READ:
-                        int raw, data_length, x;
+                        int data_length, x;
                         byte[] readBuf = (byte[]) msg.obj;
-                        //byte[] ff=mFrameProcessor.fromFrame(readBuf);
-                        data_length = msg.arg1;
+                        byte[] ff=mFrameProcessor.fromFrame(readBuf);
+                        //data_length = msg.arg1;
+                        data_length=ff.length; //on prend la longueur car fromFrame enleve des caractères de readBuf
                         for(x=0; x<data_length; x++){
-                            raw = UByte(readBuf[x]); //valeurs des tensions en fonction du temps
-                            if( raw>MAX_LEVEL ){
-                                if( raw==DATA_START ){
-                                    bDataAvailable = true;
-                                    dataIndex = 0; dataIndex1=0; dataIndex2=0;
-                                }
-                                else if( (raw==DATA_END) || (dataIndex>=MAX_SAMPLES) ){
-                                    bDataAvailable = false;
-                                    dataIndex = 0; dataIndex1=0; dataIndex2=0;
-                                    mOGView.set_data(ch1_data, ch2_data);
+                            try {
+                                int raw = UByte(ff[x]); //valeurs des tensions en fonction du temps
+
+                                if (raw > MAX_LEVEL) {
+                                    if (raw == DATA_START) {
+                                        bDataAvailable = true;
+                                        dataIndex = 0;
+                                        dataIndex1 = 0;
+                                        dataIndex2 = 0;
+                                    } else if ((raw == DATA_END) || (dataIndex >= MAX_SAMPLES)) {
+                                        bDataAvailable = false;
+                                        dataIndex = 0;
+                                        dataIndex1 = 0;
+                                        dataIndex2 = 0;
+                                        mOGView.set_data(ch1_data, ch2_data);
                                     /*if(bReady){ // send "REQ_DATA" again
                                         MainActivity.this.sendMessage( new String(new byte[] {REQ_DATA}) );
                                     }*/
-                                    break;
+                                        break;
+                                    }
+                                } else if ((bDataAvailable) && (dataIndex < (MAX_SAMPLES))) { // valid data
+                                    if ((dataIndex++) % 2 == 0)
+                                        ch1_data[dataIndex1++] = raw;    // even data
+                                    else ch2_data[dataIndex2++] = raw;    // odd data
                                 }
+                            }catch (ArrayIndexOutOfBoundsException e){
+                                System.out.println("Erreur à l'index : "+String.valueOf(x));
+                                cmptErreur++;
+                                System.out.println("Nombre d'erreurs : "+String.valueOf(cmptErreur));
+                                e.printStackTrace();
                             }
-                            else if( (bDataAvailable) && (dataIndex<(MAX_SAMPLES)) ){ // valid data
-                                if((dataIndex++)%2==0) ch1_data[dataIndex1++] = raw;	// even data
-                                else ch2_data[dataIndex2++] = raw;	// odd data
-                            }
-
                         }
                         break;
                 }

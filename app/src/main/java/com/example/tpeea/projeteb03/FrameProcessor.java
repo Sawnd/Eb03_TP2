@@ -1,5 +1,7 @@
 package com.example.tpeea.projeteb03;
 
+import android.util.Log;
+
 /**
  * Created by Steph on 05/05/2018.
  */
@@ -138,33 +140,35 @@ public class FrameProcessor {
         return result;
     }
 
-    public byte[] fromFrame(byte[] trame) {
+    public byte[] fromFrame(byte[] trameFromOscillo) {
+        int stockDebut=0;
+        int stockFin=0;
+        byte[] resultWith0x06=new byte[1024];
+        byte[] resultWithout0x06=new byte[1024];
+        for(int i=0;i<trameFromOscillo.length;i++){
+            if(trameFromOscillo[i]==(byte)0x8F) {
+                stockDebut=i;
 
-        int size = trame.length;
-        byte[] result =new byte[256];
-        for (int k=0;k<size;k++){
-            if (trame[k] == (byte) 0x8F){
-                for (int j=0;j<result.length;j++){
-                    result[j]=trame[k+1];
-                    k++;//on ne copie pas le 0x8f paskil sert a r
-                }
             }
+            if(trameFromOscillo[i]==(byte)0x04) {
+                stockFin=i;
+                break;
+            }
+
         }
-        // On enleve le header, la tail
-        /*byte[] payloadUnescaped = new byte[size - 5];
-        int k=0;
-        for (int i = 3;i<size-2;i++){
-            payloadUnescaped[k]=trame[i];
-            k++;
+        int size=stockFin-stockDebut;
+        for (int j=0;j<size-1;j++){
+            resultWith0x06[j]=trameFromOscillo[stockDebut+1];
+            stockDebut++;
         }
-        byte[] payload = toUnechap(payloadUnescaped);
-        // On verifie d'abord le byte de controle, si il n'est pas corect, on renvoie le payload null
-        byte ctrlAVerifier = (byte)Integer.parseInt(toComplement2(Integer.toHexString(toSumTab(payload) + trame[2])),16);
-        if(trame[size -2] != ctrlAVerifier) {
-           return null;
+        resultWithout0x06=toUnechap(resultWith0x06);
+        StringBuilder stb = new StringBuilder();
+        for (byte b : resultWithout0x06) {
+            stb.append(String.format("%02X ", b));
         }
-        return payload;*/
-        return result;
+
+        Log.i("FROMFRAME",stb.toString());
+        return resultWithout0x06;
     }
 
 

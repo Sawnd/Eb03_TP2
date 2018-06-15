@@ -59,6 +59,8 @@ public class OscilloManager implements Transceiver.TransceiverDataListener, Tran
         byte[] commande = {0x0B,0,0};
         if(channel==1){
             commande[1]=0x01;
+        }else if (channel==2){
+            commande[1]=0x02;
         }
         if(state){
             commande[2]=0x01;

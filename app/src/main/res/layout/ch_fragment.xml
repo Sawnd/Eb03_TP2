@@ -8,7 +8,7 @@
 
     <Switch
         android:id="@+id/chSwitch"
-        android:text="ch1"
+        android:text=" "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
