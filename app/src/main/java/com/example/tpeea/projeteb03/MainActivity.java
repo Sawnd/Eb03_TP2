@@ -157,12 +157,14 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-            private int UByte(byte b){
+            private  int UByte(byte b){
                 if(b<0) // if negative
                     return (int)( (b&0x7F) + 128 );
                 else
                     return (int)b;
             }
+
+
         };
         this.mBluetoothManager = new BluetoothManager(this, mHandler);
         this.mOscilloManager= OscilloManager.getOscilloManager();
@@ -274,5 +276,37 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public static short[] byteRaw(byte[] entree){
+        byte bFort;
+        byte bFaible;
+        short[] result = new short[entree.length/2];
+        int k=0;
+        for(int i=0;i<entree.length;i+=2){
+            bFort=entree[i];
+            bFaible=entree[i+1];
+            result[k]=concatBytes(bFort,bFaible);
+            k++;
+        }
+        return result;
+    }
+    public static short concatBytes(byte b1,byte b2){
+        return (short)((b1 <<8) |(b2 & 0xFF));
+    }
+
+    public static void main(String[] args) {
+        // Test
+        StringBuilder str =new StringBuilder();
+        byte[] b = {0x05, 0x00, 0x02, 0x07, 0x06, 0x0C,(byte)0xF1,0x04};
+      short[] result=  MainActivity.byteRaw(b);
+        if (str.length() > result.length) {
+            str.setLength(0);
+        }
+        for (short a : result) {
+            str.append(String.format("%02X ", a));
+        }
+
+        System.out.print(str);
     }
 }
