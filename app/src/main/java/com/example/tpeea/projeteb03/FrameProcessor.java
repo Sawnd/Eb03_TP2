@@ -173,11 +173,18 @@ public class FrameProcessor {
 
 
     public static void main(String[] args) {
-        // Test
+        StringBuilder str =new StringBuilder();
         byte[] b = {0x05, 0x00, 0x02, 0x07, 0x06, 0x0C,(byte)0xF1,0x04};
-        FrameProcessor fp = new FrameProcessor();
-        byte[] result = fp.fromFrame(b);
-        System.out.print(result);
+        short[] result=  MainActivity.byteRaw(b);
+        if (str.length() > result.length) {
+            str.setLength(0);
+        }
+        for (short a : result) {
+            str.append(String.format("%02X ", a));
+        }
+
+        System.out.print(str);
+
     }
 
 }
