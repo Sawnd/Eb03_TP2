@@ -138,11 +138,48 @@ public class MainActivity extends AppCompatActivity {
                         int data_length, x;
                         byte[] readBuf = (byte[]) msg.obj;
                         byte[] ff=mFrameProcessor.fromFrame(readBuf);
+                        byte[] param = new byte[6];
+                        byte[] donnees = new byte[500];
+                        for(int k=0;k<donnees.length+6;k++){
+
+                            if(k<6){
+                                param[k]=ff[k];
+                            }else{
+                               donnees[k-6]=ff[k];
+                            }
+
+                        }
+
+
                         //data_length = msg.arg1;
-                        data_length=ff.length; //on prend la longueur car fromFrame enleve des caractères de readBuf
+
+                        StringBuilder stb = new StringBuilder();
+                        if (stb.length() > donnees.length) {
+                            stb.setLength(0);
+                        }
+                        for (byte a : donnees) {
+                            stb.append(String.format("%02X ", a));
+                        }
+
+                        Log.i("DONNEES",stb.toString());
+
+                        short[] resultConcat = byteRaw(donnees);
+
+                        if (stb.length() > resultConcat.length) {
+                            stb.setLength(0);
+                        }
+                        for (short a : resultConcat) {
+                            stb.append(String.format("%02X ", a));
+                        }
+
+                        Log.i("resultcoNCAT",stb.toString());
+
+                        data_length=resultConcat.length; //on prend la longueur car fromFrame enleve des caractères de readBuf
                         for(x=0; x<data_length; x++){
                             try {
-                                int raw = UByte(ff[x]); //valeurs des tensions en fonction du temps
+                                int raw = UShort(resultConcat[x]); //valeurs des tensions en fonction du temps
+
+                                Log.i("URAW",String.valueOf(raw));
 
                                 if (raw > MAX_LEVEL) {
                                     if (raw == DATA_START) {
@@ -177,13 +214,15 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-            private int UByte(byte b){
+            private  int UShort(short b){
                 if(b<0) // if negative
-                    return (int)( (b&0x7F) + 128 );
+                    return (int)( b & 0xFFFF);
                 else
                     return (int)b;
             }
-            
+
+
+
         };
         this.mBluetoothManager = new BluetoothManager(this, mHandler);
         this.mOscilloManager= OscilloManager.getOscilloManager();
@@ -295,5 +334,37 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public static short[] byteRaw(byte[] entree){
+        byte bFort;
+        byte bFaible;
+        short[] result = new short[entree.length/2];
+        int k=0;
+        for(int i=0;i<entree.length;i+=2){
+            bFort=entree[i];
+            bFaible=entree[i+1];
+            result[k]=concatBytes(bFort,bFaible);
+            k++;
+        }
+        return result;
+    }
+    public static short concatBytes(byte b1,byte b2){
+        return (short)((b1 <<8) |(b2 & 0xFF));
+    }
+
+    public static void main(String[] args) {
+        // Test
+        StringBuilder str =new StringBuilder();
+        byte[] b = {0x05, 0x00, 0x02, 0x07, 0x06, 0x0C,(byte)0xF1,0x04};
+      short[] result=  MainActivity.byteRaw(b);
+        if (str.length() > result.length) {
+            str.setLength(0);
+        }
+        for (short a : result) {
+            str.append(String.format("%02X ", a));
+        }
+
+        System.out.print(str);
     }
 }
