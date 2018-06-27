@@ -1,8 +1,6 @@
 package com.example.tpeea.projeteb03;
 
-/**
- * Created by Steph on 20/05/2018.
- */
+
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -21,11 +19,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-
-
-/**
- * Created by colas on 02/03/2018.
- */
 
 public class Slider extends View {
 

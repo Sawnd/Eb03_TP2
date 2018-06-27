@@ -1,11 +1,5 @@
 package com.example.tpeea.projeteb03;
 
-import android.util.Log;
-
-/**
- * Created by Steph on 05/05/2018.
- */
-
 public class FrameProcessor {
 
     public StringBuilder str = new StringBuilder("");
@@ -55,15 +49,6 @@ public class FrameProcessor {
         return frame;
     }
 
-    /* Test complément à deux...
-    String toComplement(String hex) {
-        int i = Integer.parseInt(hex, 16);
-        String bin = Integer.toBinaryString(i);
-        // Complement
-        String input = bin.replaceAll("0", "a").replaceAll("1", "0").replaceAll("a", "1");
-        int number = Integer.parseInt(bin, 2) + 1;
-        return Integer.toHexString(number);
-    }*/
     // Renvoie le complement à deux d'un hexadecimal
     String toComplement2(String hex) {
         int i = Integer.parseInt(hex, 16);
@@ -74,10 +59,6 @@ public class FrameProcessor {
 
     }
 
-    /*    String toComplement3(String hex){
-            int i = Integer.parseInt(hex, 16);
-            return Integer.toHexString(255 - (i / 256) - i / 256 * 256) + 1;
-        }*/
 // Permet de sommer les octets contenu dans un tableau de byte
     int toSumTab(byte[] tab) {
         int total = 0;
@@ -162,12 +143,6 @@ public class FrameProcessor {
             stockDebut++;
         }
         resultWithout0x06=toUnechap(resultWith0x06);
-        /*StringBuilder stb = new StringBuilder();
-        for (byte b : resultWithout0x06) {
-            stb.append(String.format("%02X ", b));
-        }
-
-        Log.i("FROMFRAME",stb.toString());*/
         return resultWithout0x06;
     }
 

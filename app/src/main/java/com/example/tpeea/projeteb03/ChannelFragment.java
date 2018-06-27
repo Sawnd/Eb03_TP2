@@ -10,17 +10,11 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
-//TODO pouvoir faire un fragment par channel
-
 public class ChannelFragment extends Fragment {
 
     private Switch chSwitch;
     private MainActivity activity;
     private int channelRef;
-
-    public int getChannelRef() {
-        return channelRef;
-    }
 
     public void setChannelRef(int channelRef) {
         this.channelRef = channelRef;
@@ -41,7 +35,6 @@ public class ChannelFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         if(savedInstanceState!=null){
 
         }

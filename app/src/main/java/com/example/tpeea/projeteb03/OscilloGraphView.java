@@ -53,7 +53,7 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
     private int width=640;
     private int heigth=480;
 
-    private static int[] ch1_data = new int[640];
+    private static float[] ch1_data = new float[640];
     private static int[] ch2_data = new int[640];
     private static int ch1_pos = 240, ch2_pos = 240;
 
@@ -66,18 +66,7 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
     public OscilloGraphView(Context context, AttributeSet attrs) {
 
         super(context, attrs);
-        //super(context);
         getHolder().addCallback(this);
-
-
-        /*WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        this.width = size.x;*/
-
-        //this.ch1_data = new int[width];
-        //this.ch2_data = new int[width];
 
         int i;
         for(i=0; i<width; i++){
@@ -86,7 +75,6 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
         }
 
         dessinThread = new DessinThread(getHolder(), this);
-        //setFocusable(true);
         ch1_color.setColor(Color.YELLOW);
         ch2_color.setColor(Color.RED);
         grid_paint.setColor(Color.rgb(100, 100, 100));
@@ -124,38 +112,26 @@ public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callb
 
     }
 
-    public void set_data(int[] data1, int[] data2 ){
-        int x;
-        dessinThread.setRunning(false);
-        x = 0;
-        while(x<width){
-            if(x<(data1.length)){
-                //ch1_data[x] = data1[x];
-                ch1_data[x] = heigth-data1[x]+1;
+    public void set_data(float[] data1){
+
+        dessinThread.setRunning(true);
+
+        for(int x=0;x<width;x++){
+            if(x<data1.length){
+                ch1_data[x]=heigth/2-data1[x];
             }else{
-                ch1_data[x] = ch1_pos;
+                ch1_data[x]=ch1_pos;
             }
-            x++;
         }
-        x = 0;
-        while(x<width){
-            if(x<(data2.length)){
-                //ch2_data[x] = data2[x];
-                ch2_data[x] = heigth-data2[x]+1;
-            }else{
-                ch2_data[x] = ch2_pos;
-            }
-            x++;
-        }
-         dessinThread.setRunning(true);
+
+        dessinThread.setRunning(true);
+
     }
 
     public void PlotPoints(Canvas canvas){
 
-        /// clear screen
         canvas.drawColor(Color.rgb(20, 20, 20));
 
-        // draw grids
         for(int vertical = 1; vertical<10; vertical++){
             canvas.drawLine(
                     vertical*(width/10)+1, 1,

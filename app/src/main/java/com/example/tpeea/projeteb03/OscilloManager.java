@@ -2,11 +2,7 @@ package com.example.tpeea.projeteb03;
 
 import android.util.Log;
 
-/**
- * Created by Steph on 05/05/2018.
- */
-
-public class OscilloManager implements Transceiver.TransceiverDataListener, Transceiver.TransceiverEventListener{
+public class OscilloManager{
     private static OscilloManager instance =null;
 
     private OscilloManager(){
@@ -110,9 +106,7 @@ public class OscilloManager implements Transceiver.TransceiverDataListener, Tran
         byte[] result = {0,0};
         if(hex.length()<=4){
             result[0]=(byte)(Integer.parseInt(Character.toString(hex.charAt(0)),16)+Integer.parseInt(Character.toString(hex.charAt(1)),16)*16);
-           // result[0] = (byte) unsignedByteToInt(result[0]);
             result[1]=(byte)(Integer.parseInt(Character.toString(hex.charAt(2)),16)+Integer.parseInt(Character.toString(hex.charAt(3)),16)*16);
-            //result[1] = (byte) unsignedByteToInt(result[1]);
         }
         return result;
     }

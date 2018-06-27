@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-//TODO gerer les boutons
 
 public class TimeDivFragment extends Fragment {
 
@@ -50,12 +49,7 @@ public class TimeDivFragment extends Fragment {
         minusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //faire les bails
                 text.setText("moins");
-                /*if (index > 0){
-                    index -= index;
-                text.setText(divsTable[index] + "ms/div");
-            }*/
             }
         });
 
@@ -63,12 +57,7 @@ public class TimeDivFragment extends Fragment {
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //faire les bails
                 text.setText("plus");
-                /*if (index < 16){
-                    index += index;
-                    text.setText(divsTable[index] + "ms/div");
-                }*/
             }
         });
 
