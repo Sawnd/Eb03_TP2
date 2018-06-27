@@ -3,9 +3,7 @@ package com.example.tpeea.projeteb03;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -16,14 +14,9 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -170,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**Vérifie si l'utilisateur possède un adaptateur blueetooth et s'il peut l'utiliser. S'il en possède un  mais que l'application n'a pas l'autorisation de l'utiliser, une reqûete sera faite à l'utiisateur.
+    /**Vérifie si l'utilisateur possède un adaptateur bluetooth et s'il peut l'utiliser. S'il en possède un  mais que l'application n'a pas l'autorisation de l'utiliser, une reqûete sera faite à l'utiisateur.
      * Renvoie des constantes définies plus haut en fonction des situations
      * **/
     private int BluetoothRights() {
@@ -236,20 +229,5 @@ public class MainActivity extends AppCompatActivity {
      * **/
     public static short concatBytes(byte b1,byte b2){
         return (short)((b1 <<8) |(b2 & 0xFF));
-    }
-
-    public static void main(String[] args) {
-        // Test
-        StringBuilder str =new StringBuilder();
-        byte[] b = {0x05, 0x00, 0x02, 0x07, 0x06, 0x0C,(byte)0xF1,0x04};
-      short[] result=  MainActivity.byteRaw(b);
-        if (str.length() > result.length) {
-            str.setLength(0);
-        }
-        for (short a : result) {
-            str.append(String.format("%02X ", a));
-        }
-
-        System.out.print(str);
     }
 }

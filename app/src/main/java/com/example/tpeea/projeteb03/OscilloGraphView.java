@@ -4,13 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-//import android.os.Handler;
-import android.graphics.Point;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
-import android.view.WindowManager;
+
 
 public class OscilloGraphView extends SurfaceView implements SurfaceHolder.Callback {
 
