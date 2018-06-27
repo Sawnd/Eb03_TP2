@@ -1,7 +1,6 @@
 package com.example.tpeea.projeteb03;
 
 
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -17,7 +16,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-
 
 
 public class Slider extends View {
@@ -94,7 +92,7 @@ public class Slider extends View {
      */
     public Slider(Context context) {
         super(context);
-        init(context,null);
+        init(context, null);
     }
 
     /**
@@ -173,11 +171,9 @@ public class Slider extends View {
         }
 
 
-
-        if(mMin == 0){
+        if (mMin == 0) {
             mValueBarPaint.setStrokeCap(Paint.Cap.ROUND);
         }
-
 
 
         // et finalement des couleurs (utilisation des couleurs du thème par défaut)
@@ -225,7 +221,7 @@ public class Slider extends View {
         Point cursorPosition = toPosition(mValue);
         Point originPosition = toPosition(Math.max(0, mMin));
 
-        if(!originPosition.equals(cursorPosition)) {
+        if (!originPosition.equals(cursorPosition)) {
             canvas.drawLine(originPosition.x, originPosition.y, cursorPosition.x, cursorPosition.y, mValueBarPaint);
         }
         canvas.drawCircle(cursorPosition.x, cursorPosition.y, mCursorDiameter / 2, mCursorPaint);

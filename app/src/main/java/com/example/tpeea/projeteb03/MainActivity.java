@@ -104,14 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-            private  int UShort(short b){
-                if(b<0) // if negative
-                    return (int)( b & 0xFFFF);
-                else
-                    return (int)b;
-            }
-
-
 
         };
         this.mBluetoothManager = new BluetoothManager(this, mHandler);
@@ -178,7 +170,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**Vérifie si l'utilisateur possède un adaptateur blueetooth et s'il peut l'utiliser. S'il en possède un  mais que l'application n'a pas l'autorisation de l'utiliser, une reqûete sera faite à l'utiisateur.
+     * Renvoie des constantes définies pls aut en fonction des cas
+     * **/
     private int BluetoothRights() {
         if (BluetoothAdapter.getDefaultAdapter() == null) {
             return NO_ADAPTER;
@@ -193,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         return PERMISSION_GRANTED;
     }
 
+    /**Permet de vérifier si l' utilisateur possède les autorisations passées en paramètres sous la forme de String. Dés qu'une des autorisations n'est pas accordées, la méthode renvoie False. Renvoie True sinon*/
     private boolean checkMultiplePermissions(String[] permissions) {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(this, permission) == PERMISSION_DENIED) {
@@ -219,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Cette méthode eprmet à partir d'un tableau de byte de grouper deux par deux chacun des bytes afin d'en faire des shorts. Elle renvoie le tableau de short obtenu.
+     * **/
     public static short[] byteRaw(byte[] entree){
         byte bFort;
         byte bFaible;
@@ -232,6 +230,10 @@ public class MainActivity extends AppCompatActivity {
         }
         return result;
     }
+
+    /**
+     * Permet de concaténer deux bytes afin d'obtenir un short
+     * **/
     public static short concatBytes(byte b1,byte b2){
         return (short)((b1 <<8) |(b2 & 0xFF));
     }

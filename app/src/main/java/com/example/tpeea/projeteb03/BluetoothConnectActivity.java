@@ -34,40 +34,41 @@ public class BluetoothConnectActivity extends AppCompatActivity implements Adapt
         String address = deviceInfo.substring(deviceInfo.length() - 17);
 
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("btDevice",mBluetoothAdapter.getRemoteDevice(address));
-        setResult(Activity.RESULT_OK,returnIntent);
+        returnIntent.putExtra("btDevice", mBluetoothAdapter.getRemoteDevice(address));
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 
     //classe interne étendant broadcastreceiver
-    class cReceiver extends BroadcastReceiver{
+    class cReceiver extends BroadcastReceiver {
 
         private ArrayAdapter adapteur;
 
-        public cReceiver (ArrayAdapter adapteur){
+        public cReceiver(ArrayAdapter adapteur) {
             super();
-            this.adapteur=adapteur;
+            this.adapteur = adapteur;
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
-            if (BluetoothDevice.ACTION_FOUND.equals(action))
-            {
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice newDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if (newDevice.getName()!=null && newDevice.getBondState()!=newDevice.BOND_BONDED){
-                    adapteur.add(newDevice.getName()+"\n"+newDevice.getAddress());
+                if (newDevice.getName() != null && newDevice.getBondState() != newDevice.BOND_BONDED) {
+                    adapteur.add(newDevice.getName() + "\n" + newDevice.getAddress());
                 }
 
-            }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 mBluetoothAdapter.cancelDiscovery();
                 ProgressBar pb = findViewById(R.id.progressBar);
                 pb.setVisibility(View.GONE);
                 getSupportActionBar().setTitle("Appareils Bluetooth");
             }
         }
-    };
+    }
+
+    ;
 
     private cReceiver mReceiver;
 
@@ -94,11 +95,10 @@ public class BluetoothConnectActivity extends AppCompatActivity implements Adapt
         getSupportActionBar().setTitle("Recherche...");
 
 
-
         //affichage des appareils appairés
         Set<BluetoothDevice> pairedDevicesSet = mBluetoothAdapter.getBondedDevices();
-        for(BluetoothDevice bt : pairedDevicesSet) {
-            pairedDevicesArray.add(bt.getName()+"\n"+bt.getAddress());
+        for (BluetoothDevice bt : pairedDevicesSet) {
+            pairedDevicesArray.add(bt.getName() + "\n" + bt.getAddress());
         }
         final ArrayAdapter<String> pairedDevicesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, pairedDevicesArray);
         ListView listApp = (ListView) findViewById(R.id.ListApp);

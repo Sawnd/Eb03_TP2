@@ -16,7 +16,7 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 
-public class BluetoothManager{
+public class BluetoothManager {
 
     private BluetoothDevice bluetoothDevice;
     private BluetoothAdapter mBluetoothAdapter;
@@ -24,7 +24,6 @@ public class BluetoothManager{
     private static final String TAG = "BLUETOOTHMANAGER";
     private Handler mHandler;
     private ConnectedThread mConnectedThread;
-
 
 
     private ConnectThread mConnectThread;
@@ -44,15 +43,15 @@ public class BluetoothManager{
     }
 
 
-    public BluetoothManager(Context context, Handler handler){
+    public BluetoothManager(Context context, Handler handler) {
         this.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        this.bluetoothState=STATE_NONE;
+        this.bluetoothState = STATE_NONE;
         this.mHandler = handler;
-        this.mContext=context;
+        this.mContext = context;
     }
 
-    public synchronized void connect(BluetoothDevice bd){
-        this.bluetoothDevice=bd;
+    public synchronized void connect(BluetoothDevice bd) {
+        this.bluetoothDevice = bd;
         if (this.bluetoothState == STATE_CONNECTING) {
             if (this.mConnectThread != null) {
                 this.mConnectThread.cancel();
@@ -65,13 +64,13 @@ public class BluetoothManager{
             this.mConnectedThread = null;
         }
 
-        this.mConnectThread = new ConnectThread(this,bluetoothDevice);
+        this.mConnectThread = new ConnectThread(this, bluetoothDevice);
         this.mConnectThread.start();
 
         this.setBluetoothState(STATE_CONNECTING);
     }
 
-    public synchronized void connected(BluetoothSocket socket){
+    public synchronized void connected(BluetoothSocket socket) {
 
 
         if (this.mConnectedThread != null) {
@@ -87,7 +86,7 @@ public class BluetoothManager{
 
     }
 
-    public synchronized void stopConnection(){
+    public synchronized void stopConnection() {
         if (this.mConnectThread != null) {
             this.mConnectThread.cancel();
             this.mConnectThread = null;
@@ -111,7 +110,6 @@ public class BluetoothManager{
     }
 
 
-
     public synchronized int getBluetoothState() {
         return this.bluetoothState;
     }
@@ -120,7 +118,7 @@ public class BluetoothManager{
         this.bluetoothState = bluetoothState;
     }
 
-    class ConnectThread extends Thread{
+    class ConnectThread extends Thread {
         public BluetoothSocket gettSocket() {
             return tSocket;
         }
@@ -133,10 +131,11 @@ public class BluetoothManager{
         private final BluetoothDevice tDevice;
         private BluetoothManager tManager;
         public boolean isConnected = false;
-        public ConnectThread(BluetoothManager bm, BluetoothDevice bd){
+
+        public ConnectThread(BluetoothManager bm, BluetoothDevice bd) {
             BluetoothSocket tmp = null;
             tDevice = bd;
-            tManager=bm;
+            tManager = bm;
             try {
                 // Connexion du socket avec le device à partir de son uuid
                 tmp = tDevice.createRfcommSocketToServiceRecord(uuid);
@@ -163,7 +162,7 @@ public class BluetoothManager{
             }
 
             //Connexion réussie
-            isConnected=true;
+            isConnected = true;
             tManager.connected(tSocket);
 
         }
@@ -176,25 +175,27 @@ public class BluetoothManager{
             }
         }
 
-    };
+    }
 
-    class ConnectedThread extends Thread{
-                private final BluetoothSocket tSocket;
-                private final InputStream tInStream;
-                private final OutputStream tOutStream;
-                public StringBuilder stb=new StringBuilder();
-                private byte[] tBuffer;
+    ;
 
-                public ConnectedThread(BluetoothSocket bs){
-                    this.tSocket=bs;
+    class ConnectedThread extends Thread {
+        private final BluetoothSocket tSocket;
+        private final InputStream tInStream;
+        private final OutputStream tOutStream;
+        public StringBuilder stb = new StringBuilder();
+        private byte[] tBuffer;
 
-                    InputStream tmpIn = null;
-                    OutputStream tmpOut=null;
-                    try {
-                        tmpIn = tSocket.getInputStream();
-                    } catch (IOException e) {
-                        Log.e(TAG, "Erreur dans la création de l'InputStream", e);
-                    }
+        public ConnectedThread(BluetoothSocket bs) {
+            this.tSocket = bs;
+
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+            try {
+                tmpIn = tSocket.getInputStream();
+            } catch (IOException e) {
+                Log.e(TAG, "Erreur dans la création de l'InputStream", e);
+            }
             try {
                 tmpOut = tSocket.getOutputStream();
             } catch (IOException e) {
@@ -206,7 +207,7 @@ public class BluetoothManager{
         }
 
         public void run() {
-            Log.i(TAG,"Lancement du connectedThread");
+            Log.i(TAG, "Lancement du connectedThread");
             tBuffer = new byte[1024];
             int numBytes; // bytes returned from read()
 
@@ -214,7 +215,7 @@ public class BluetoothManager{
             while (true) {
                 try {
                     // Read from the InputStream.
-                        numBytes = tInStream.read(tBuffer);
+                    numBytes = tInStream.read(tBuffer);
                     // Send the obtained bytes to the UI activity.
                     Message readMsg = mHandler.obtainMessage(MessageConstants.MESSAGE_READ, numBytes, -1, tBuffer);
                     readMsg.sendToTarget();
@@ -251,7 +252,9 @@ public class BluetoothManager{
         }
 
 
-    };
+    }
+
+    ;
 
     public ConnectedThread getmConnectedThread() {
         return mConnectedThread;

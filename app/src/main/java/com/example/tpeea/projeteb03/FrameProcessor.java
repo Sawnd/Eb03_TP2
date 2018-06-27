@@ -2,7 +2,9 @@ package com.example.tpeea.projeteb03;
 
 public class FrameProcessor {
 
-/**Permet de transformer un payload reçu en paramètre en une trame compréhensible apr l'oscilloscope**/
+    /**
+     * Permet de transformer un payload reçu en paramètre en une trame compréhensible apr l'oscilloscope
+     **/
     // On reçoit en paramètres un tableau de byte contenant la commande et ses arguments
     public byte[] toFrame(byte[] commande) {
         // On construit la trame
@@ -50,7 +52,7 @@ public class FrameProcessor {
 
     }
 
-// Permet de sommer les octets contenu dans un tableau de byte
+    // Permet de sommer les octets contenu dans un tableau de byte
     int toSumTab(byte[] tab) {
         int total = 0;
         for (int val : tab) {
@@ -82,7 +84,10 @@ public class FrameProcessor {
         }
         return result;
     }
-  /**Permet d'enlever les caractères d'échappements d'une trame**/
+
+    /**
+     * Permet d'enlever les caractères d'échappements d'une trame
+     **/
     byte[] toUnechap(byte[] b) {
         int i = 0;
         for (byte bi : b) {
@@ -112,28 +117,31 @@ public class FrameProcessor {
         return result;
     }
 
+    /**
+     * Permet de décoder les informations envoyées par l'oscilloscope
+     **/
     public byte[] fromFrame(byte[] trameFromOscillo) {
-        int stockDebut=0;
-        int stockFin=0;
-        byte[] resultWith0x06=new byte[1024];
-        byte[] resultWithout0x06=new byte[1024];
-        for(int i=0;i<trameFromOscillo.length;i++){
-            if(trameFromOscillo[i]==(byte)0x8F) {
-                stockDebut=i;
+        int stockDebut = 0;
+        int stockFin = 0;
+        byte[] resultWith0x06 = new byte[1024];
+        byte[] resultWithout0x06 = new byte[1024];
+        for (int i = 0; i < trameFromOscillo.length; i++) {
+            if (trameFromOscillo[i] == (byte) 0x8F) {
+                stockDebut = i;
 
             }
-            if(trameFromOscillo[i]==(byte)0x04) {
-                stockFin=i;
+            if (trameFromOscillo[i] == (byte) 0x04) {
+                stockFin = i;
                 break;
             }
 
         }
-        int size=stockFin-stockDebut;
-        for (int j=0;j<size-1;j++){
-            resultWith0x06[j]=trameFromOscillo[stockDebut+1];
+        int size = stockFin - stockDebut;
+        for (int j = 0; j < size - 1; j++) {
+            resultWith0x06[j] = trameFromOscillo[stockDebut + 1];
             stockDebut++;
         }
-        resultWithout0x06=toUnechap(resultWith0x06);
+        resultWithout0x06 = toUnechap(resultWith0x06);
         return resultWithout0x06;
     }
 
