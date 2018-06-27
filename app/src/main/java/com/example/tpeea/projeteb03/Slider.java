@@ -212,12 +212,6 @@ public class Slider extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-//        Log.i("DRAW", "Width" + String.valueOf(getWidth()));
-//        Log.i("DRAW", "Height" + String.valueOf(getHeight()));
-//        Log.i("DRAW", "Padding left" + String.valueOf(reconciliateWidth()));
-//        Log.i("DRAW", "Padding Top" + String.valueOf(reconciliateHeight()));
-        // récupération de la place disponible
         setPadding(reconciliateWidth(), reconciliateHeight(), 0, 0);
 
 

@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
                     //envoyer la commande
                         if(mBluetoothManager.getBluetoothState()==mBluetoothManager.STATE_CONNECTED){
                         byte[] trame=mFrameProcessor.toFrame(mOscilloManager.setCalibrationDutyCycle(value));
-                        mTextViewString.setText(mFrameProcessor.str);
                         mBluetoothManager.write(trame);
                         Toast.makeText(MainActivity.this,"envoi de la trame",Toast.LENGTH_SHORT).show();
                     }

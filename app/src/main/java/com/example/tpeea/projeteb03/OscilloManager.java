@@ -88,7 +88,9 @@ public class OscilloManager{
         byte[] commande = {0x0C,(byte)type};
         return commande;
     }
-
+    /**
+     *  Permet d'avoir un nombre hexadécimal sur 4 bits  s'il en fait moins
+     * **/
     public String hexString(int i){
         String hex = Integer.toHexString(i);
         StringBuilder result = new StringBuilder("0000");
@@ -101,7 +103,9 @@ public class OscilloManager{
         }
         return result.toString();
     }
-
+    /**
+     * Permet à partir d'un hexadécimal de récupérer les Most and Least Significant bits
+     **/
     public byte[] getLsbMsb(String hex){
         byte[] result = {0,0};
         if(hex.length()<=4){
@@ -110,21 +114,11 @@ public class OscilloManager{
         }
         return result;
     }
+
+    /*Permet de transformer un byte  non signé en entier*/
     public int unsignedByteToInt(byte b) {
         return (int) b & 0xFF;
     }
 
 
-    interface OscilloEventListener{
-
-    }
-    public static void main (String[] args){
-        // Test
-        int a = 0xFA51;
-        OscilloManager om = OscilloManager.getOscilloManager();
-        String hex =om.hexString(a);
-        System.out.println(hex);
-        byte[] result =om.getLsbMsb(hex);
-        System.out.print(result);
-    }
 }

@@ -2,9 +2,8 @@ package com.example.tpeea.projeteb03;
 
 public class FrameProcessor {
 
-    public StringBuilder str = new StringBuilder("");
-
-    // On reçoit en paramètres un tableau de byte contenan la commande et ses arguments
+/**Permet de transformer un payload reçu en paramètre en une trame compréhensible apr l'oscilloscope**/
+    // On reçoit en paramètres un tableau de byte contenant la commande et ses arguments
     public byte[] toFrame(byte[] commande) {
         // On construit la trame
         byte header = 0x05;
@@ -37,14 +36,6 @@ public class FrameProcessor {
             i++;
         }
         frame[i] = tail;
-
-
-        if (str.length() > frame.length) {
-            str.setLength(0);
-        }
-        for (byte b : frame) {
-            str.append(String.format("%02X ", b));
-        }
 
         return frame;
     }
@@ -91,7 +82,7 @@ public class FrameProcessor {
         }
         return result;
     }
-
+  /**Permet d'enlever les caractères d'échappements d'une trame**/
     byte[] toUnechap(byte[] b) {
         int i = 0;
         for (byte bi : b) {
@@ -144,12 +135,6 @@ public class FrameProcessor {
         }
         resultWithout0x06=toUnechap(resultWith0x06);
         return resultWithout0x06;
-    }
-
-
-    public static void main(String[] args) {
-        
-
     }
 
 }
