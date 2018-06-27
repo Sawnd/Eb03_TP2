@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**Vérifie si l'utilisateur possède un adaptateur blueetooth et s'il peut l'utiliser. S'il en possède un  mais que l'application n'a pas l'autorisation de l'utiliser, une reqûete sera faite à l'utiisateur.
-     * Renvoie des constantes définies pls aut en fonction des cas
+     * Renvoie des constantes définies plus haut en fonction des situations
      * **/
     private int BluetoothRights() {
         if (BluetoothAdapter.getDefaultAdapter() == null) {
